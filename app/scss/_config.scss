@@ -677,6 +677,9 @@ $gray: #e8e8e8;
     border-radius: $border;
     padding: 40px 0 32px;
     color: $txt-color;
+    @include d(s) {
+      width: grid(12);
+    }
     &--text { // Texto do Modal
       font-size: em(12);
       .price { // Preço do Curso - Modal
@@ -703,6 +706,9 @@ $gray: #e8e8e8;
       margin: 0 auto;
       letter-spacing: 1px;
       transition: .2s ease-in;
+      @include d(s) {
+        width: grid(9);
+      }
       &:hover {
         background: darken($main-color, 4);
       }
