@@ -1,2 +1,725 @@
-//Coloque aqui as configurações para seu SCSS
-$app-background: #EEE;
+// A maioria dos prefixos são colocados diretamento no .css pelo editor que uso.
+
+// Mixin font
+@mixin font { // Font utilizada durante o projeto
+  font-family: 'Montserrat', sans-serif;
+}
+
+// Mini reset
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  @include font;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+// Variáveis
+$app-background: #F3FAFC;
+$main-color: #AA56D2;
+$main-gradient: (90deg, #AA56D2, #ED56C5);
+$txt-color: #1b2145;
+$cols: 12;
+$gutter: 20px;
+$l-device: 1200px;
+$m-device: 800px;
+$s-device: 400px;
+$border: 0.25rem;
+$green: #22c648;
+$gray: #e8e8e8;
+
+// Mixin Media Queries
+@mixin d($size) {
+  @if $size==l {
+    @media only screen and (min-width: #{$l-device}) {
+      @content;
+    }
+  }
+  @else if $size==m {
+    @media only screen and (min-width: #{$m-device}) and (max-width: #{$l-device} - 1) {
+      @content;
+    }
+  }
+  @else if $size==s {
+    @media screen and (max-width: #{$m-device} - 1) {
+      @content;
+    }
+  }
+}
+
+// Funções
+@function em($pixels, $contexto: 16) { // Função para utilizar mais facilmente 'em'
+  @return ($pixels / $contexto) * 1em;
+}
+
+//Grid
+@function grid($col, $offset: false) { // Função reutilizável do grid para width/max-width
+  $width: $col / $cols * 100%;
+  $result: calc(#{$width} - #{$gutter});
+  @if $offset==offset {
+    $gutter: $gutter / 2;
+    $result: calc(#{$width} + #{$gutter});
+  }
+  @return $result;
+}
+
+@for $i from 1 through $cols { // Loop para criar colunas
+  .col-#{$i} {
+    width: grid($i);
+  }
+}
+
+@mixin grid-structure { // Estrutura geral do grid
+  float: left;
+  min-height: 1px;
+  margin-left: $gutter / 2;
+  margin-right: $gutter / 2;
+  @include d(s) {
+    width: 100%;
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+[class^="col-"] { // Incluir a estrutura nas colunas
+  @include grid-structure;
+}
+
+@mixin clearfix { // Mixin do Clearfix
+  &::after,
+  &::before {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin container { // Mixin do Container
+  max-width: $l-device;
+  margin: 0 auto;
+  position: relative;
+  @include d(m) {
+    max-width: $m-device;
+  }
+  @include d(s) {
+    max-width: $s-device;
+    margin-left: $gutter / 2;
+    margin-right: $gutter / 2;
+  }
+  @include clearfix;
+}
+
+.container { // Container
+  @include container;
+}
+
+.row { // Linha
+  margin-left: -($gutter / 2);
+  margin-right: -($gutter / 2);
+}
+
+// Queries class
+.pc { // Caso queria que só apareça no PC
+  @include d(m) {
+    display: none;
+  }
+  @include d(s) {
+    display: none;
+  }
+}
+
+.tablet { // Caso queria que só apareça no Tablet
+  @include d(l) {
+    display: none;
+  }
+  @include d(s) {
+    display: none;
+  }
+}
+
+.pc-tablet { // Caso queira que apareça no PC/Tablet
+  @include d(s) {
+    display: none;
+  }
+}
+
+.mobile-tablet { // Caso queria que apareça Tablet/Mobile
+  @include d(l) {
+    display: none;
+  }
+}
+
+.mobile { // Caso queria que apareça apenas Mobile
+  @include d(m) {
+    display: none;
+  }
+  @include d(l) {
+    display: none;
+  }
+}
+
+// SCSS Geral
+
+.block { // Bloco de "decoração" 
+  padding: 180px 0 180px;
+  max-width: 100%;
+  background: $main-color;
+  position: relative;
+  background: linear-gradient($main-gradient);
+  @include d(s) { // Ajustes para telas pequenas
+    padding: 90px 0 64px;
+  }
+}
+
+.item { // Container onde tem o produto a ser comprado
+  padding: 20px 60px 30px;
+  background: #FFF;
+  color: $txt-color;
+  font-size: em(20);
+  margin: -22% auto -30px;
+  border-radius: $border;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(49, 58, 82, 0.1);
+  position: relative;
+  z-index: 1;
+  @include d(m) { // Pequeno ajuste em telas médias
+    margin: -24% auto -30px;
+  }
+  @include d(s) { // Pequeno ajuste em telas pequenas
+    margin: -20% auto -30px;
+  }
+  &-title { // Título - Curso Desenvolvedor Youzoom
+    flex: 1 1 100%;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: em(9);
+    font-weight: bold;
+    color: darken($main-color, 30);
+    letter-spacing: 1.2px;
+    margin-bottom: 20px;
+  }
+  &-content { // Conteúdo
+    margin: 0 auto;
+    max-width: 248px;
+    @include d(s) {
+      max-width: 100%;
+    }
+  }
+  &-img { // Ajustes diretos no SVG
+    display: inline-block;
+    max-width: 20%;
+    width: 20%;
+    vertical-align: middle;
+    @include d(s) { // Ajustes para telas pequenas
+      display: block;
+      margin: 0 auto 16px;
+    }
+  }
+  &-text { // Texto bruto
+    display: inline-block;
+    vertical-align: middle;
+    width: 170px;
+    max-width: 170px;
+    min-width: 170px;
+    margin-left: 20px;
+  }
+  &-old { // Preço velho
+    display: block;
+    font-size: em(11);
+    margin-bottom: 4px;
+    text-decoration: line-through;
+    opacity: .6;
+  }
+  &-new { // Preço novo
+    font-size: em(24);
+    position: relative;
+    &-subs { // Subs 
+      display: inline-block;
+      position: absolute;
+      width: 150%;
+      top: -3px;
+      sup,
+      sub {
+        font-size: 0.875rem;
+        display: inline-block;
+        margin-left: 4px;
+      }
+      sub {
+        opacity: .5;
+        margin-left: -29px;
+      }
+    }
+  }
+  @include d(l) {
+    width: grid(4);
+  }
+  @include d(m) {
+    width: grid(6);
+  }
+}
+
+.compra { // Container principal - onde haverá a compra
+  padding: 48px 60px;
+  background: #FFF;
+  color: $txt-color;
+  font-weight: bold;
+  font-size: em(20);
+  margin: 0 auto 80px;
+  border-radius: $border;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(49, 58, 82, 0.1);
+  position: relative;
+  @include d(l) {
+    width: grid(6);
+  }
+  @include d(m) {
+    width: grid(8);
+  }
+}
+
+// Keyframe da seta do scroll (mobile e tablet)
+@keyframes seta {
+  from {
+    right: 4px;
+  }
+  to {
+    right: 16px;
+  }
+}
+
+.cartoes { // Ajuste nas bandeiras dos cartões de crétidos
+  margin: 20px auto 0;
+  -js-display: flex; //ie10 pra baixo
+  display: flex; //outros
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  overflow-x: auto; // Caso ainda precise
+  @include d(m) { // Seta no scroll do tablet
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    &::after {
+      content: '→';
+      position: absolute;
+      right: 4px;
+      top: 0;
+      color: rgba(0, 0, 0, .6);
+      animation: seta .5s ease-in 0s infinite alternate;
+    }
+  }
+  @include d(s) { // Seta do scroll no mobile
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    padding: 10px 0 40px;
+    &::after {
+      content: '→';
+      position: absolute;
+      right: 4px;
+      top: 0;
+      color: rgba(0, 0, 0, .6);
+      animation: seta .5s ease-in 0s infinite alternate;
+    }
+  }
+}
+
+.trigger { // Seleção de cartões
+  opacity: .3;
+  cursor: pointer;
+  transition: .12s ease-in;
+  max-width: 70px;
+  max-height: 70px;
+  margin: 20px 20px 0;
+  &:hover {
+    opacity: .6;
+  }
+  img { // Ajuste do SVG bruto
+    max-width: 70px;
+    width: 70px;
+    height: 70px;
+    max-height: 70px;
+    pointer-events: none;
+  }
+}
+
+.trigger-input { // Esconder o botão do input
+  display: none !important;
+}
+
+.trigger-input:checked+.trigger { // Click na bandeira
+  opacity: 1;
+}
+
+.selected { // CSS do cartão que está selecionado
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  font-size: em(13);
+  font-weight: normal;
+  opacity: .4;
+  letter-spacing: .8px;
+}
+
+.main-form { // Ajustes no formulário do cartão até cvv/cvc
+  font-size: em(12);
+  text-transform: uppercase;
+  text-align: left;
+  @include d(s) {
+    text-align: center;
+  }
+  >div { // Labels do formulário
+    label {
+      display: block;
+    }
+  }
+  label {
+    opacity: .5;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    letter-spacing: .8px;
+    font-weight: normal;
+  }
+  input,
+  select { // Inputs e selects
+    @include font;
+    padding: 8px 12px;
+    border-radius: $border;
+    background: #F8F8F8;
+    border: 2px solid $main-color;
+    transition: .2s ease-in;
+    font-size: em(16);
+    font-weight: bold;
+    color: $txt-color;
+    &:hover {
+      border: 2px solid darken($main-color, 10);
+      background: transparent;
+    }
+    &:focus {
+      outline: none;
+      background: transparent;
+      border: 2px solid lighten($main-color, 10);
+    }
+    &:invalid {
+      color: #C8C8C8; // "Placeholder" da validade
+    }
+  }
+  input::placeholder { // Fonte do placeholder normal
+    opacity: .4;
+    font-weight: bold;
+  }
+}
+
+// Rejeição de formulário, aceitação de formulário e ícones de erro (normal e mobile)
+.accepted { // Caso o formulário esteja correto
+  border: 2px solid $green !important;
+  background: transparent !important;
+  &-bg {
+    background: transparent !important; // Caso eu queria sem a borda, apenas com o background
+  }
+}
+
+.rejected { // Caso o formulário esteja errado
+  border: 2px solid darken(red, 5) !important;
+  background: transparent !important;
+  position: relative;
+  &:focus {
+    border: 2px solid darken(red, 8);
+  }
+  &:hover {
+    border: 2px solid red;
+  }
+}
+
+.error-icon { // Ícone de rejeição 'x' que acompanha o formulário rejeitado
+  position: absolute;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-top: 10px;
+  margin-left: -32px;
+  overflow: hidden;
+  font-style: normal;
+  font-weight: normal;
+  color: $txt-color;
+  &::after {
+    content: 'x';
+    color: lighten(red, 10);
+    font-style: normal;
+    font-weight: bold;
+    height: 12px;
+    margin-top: -6px;
+  }
+  &-mob { // Acompanhamento para o mobile
+    position: absolute;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin-top: 10px;
+    margin-left: -32px;
+    overflow: hidden;
+    font-style: normal;
+    font-weight: normal;
+    color: #A7ABB6;
+  }
+}
+
+// Ajuste mobile para a validade
+@include d(s) {
+  #validadeAno {
+    margin-top: 8px;
+  }
+}
+
+// Botão principal
+.btn {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  position: relative;
+  border-radius: $border;
+  border: none;
+  padding: 16px;
+  cursor: pointer;
+  font-size: em(16);
+  text-transform: uppercase;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  overflow: hidden;
+  span { // Ajuste na fonte do botão principal
+    position: relative;
+    top: 50%;
+    z-index: 1;
+  }
+  &:after { // Hover do botão principal
+    position: absolute;
+    content: '';
+    display: inline-block;
+    background: $main-color;
+    background: linear-gradient($main-gradient);
+    height: 200px;
+    top: 0;
+    left: 0;
+    width: 300%;
+    transform: translateX(-66%);
+    transition: .4s ease-in;
+  }
+  &:hover {
+    &:after { // Animação para o hover do botão principal
+      transform: translateX(0);
+    }
+  }
+  &:focus { // Ajuste no clique do botão principal
+    outline: none;
+  }
+}
+
+// Card Footer - Segurança e Reset Button
+.security {
+  font-size: em(11);
+  font-weight: normal;
+  margin-top: 0;
+  color: $main-color;
+  display: flex; // others
+  align-items: center;
+  justify-content: space-around;
+  @include d(s) {
+    display: block;
+  }
+  p { // Conta 100% segura. ;D
+    position: relative;
+    display: flex;
+    align-items: center;
+    &::before { // Ícone da Segurança - Footer
+      content: '';
+      display: inline-block;
+      position: relative;
+      top: -2px;
+      background: url(../imgs/lock.svg) no-repeat;
+      height: 32px;
+      width: 32px;
+      color: $main-color;
+      margin-right: 4px;
+    }
+  }
+  .reset { // Botão de Reset
+    text-decoration: none;
+    font-weight: bold;
+    color: darken($main-color, 20);
+    transition: color .2s ease-in;
+    &:hover {
+      color: lighten($main-color, 10);
+    }
+    @include d(s) {
+      display: block;
+      margin-top: 24px;
+    }
+  }
+}
+
+// Loader
+.loader-bg { // BG Preto Fixo
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .72);
+  width: 100vw;
+  z-index: 20;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease-in;
+}
+
+.loader-active { // Ativação do Loader
+  height: 100vh;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+  .loader { // Animação do Loader
+    opacity: 1;
+    transform: scale(1) translate3d(50%, -40%, 0);
+  }
+}
+
+.loader { // Transição do Loader
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  opacity: 0;
+  transform: scale(0) translate3d(50%, -60%, 0);
+  transition: .3s cubic-bezier(0, .8, .4, 1.3) .3s;
+}
+
+#loader { // Configurações gerais dos elementos do Loader
+  span {
+    display: inline-block;
+    width: 6px;
+    height: 16px;
+    border-radius: 999px;
+    background-color: lighten($main-color, 10);
+    &:nth-child(1) {
+      animation: grow 1s ease-in-out .2s infinite alternate;
+    }
+    &:nth-child(2) {
+      animation: grow 1s ease-in-out .4s infinite alternate;
+    }
+    &:nth-child(3) {
+      animation: grow 1s ease-in-out .6s infinite alternate;
+    }
+    &:nth-child(4) {
+      animation: grow 1s ease-in-out .8s infinite alternate;
+    }
+    &+span {
+      margin-left: 2px;
+    }
+  }
+  p {
+    color: white;
+    font-size: em(12);
+    text-transform: uppercase;
+    margin-top: 24px;
+    color: lighten($main-color, 15);
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+}
+
+@keyframes grow { // Keyframe do Loader
+  0%,
+  100% {
+    -webkit-transform: scaleY(1);
+    -ms-transform: scaleY(1);
+    -o-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+  100% {
+    -webkit-transform: scaleY(3);
+    -ms-transform: scaleY(3);
+    -o-transform: scaleY(3);
+    transform: scaleY(3);
+    background-color: lighten($main-color, 15);
+  }
+}
+
+// Modal
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .72);
+  width: 100vw;
+  z-index: 20;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease-in;
+  &-active { // Ativação do Modal
+    height: 100vh;
+    opacity: 1;
+    visibility: visible;
+  }
+  &-wrapper { // Caixa do Modal
+    position: absolute;
+    background: #FFF;
+    top: 50%;
+    right: 50%;
+    transform: translateX(50%) translateY(-50%);
+    border-radius: $border;
+    padding: 40px 0 32px;
+    color: $txt-color;
+    &--text { // Texto do Modal
+      font-size: em(12);
+      .price { // Preço do Curso - Modal
+        font-size: em(84);
+        font-weight: bold;
+        margin: 0 0 20px;
+        letter-spacing: 1px;
+      }
+      p:nth-child(2) {
+        margin-top: 20px;
+      }
+    }
+    &--btn { // Botão do Modal
+      display: block;
+      text-decoration: none;
+      color: #FFF;
+      text-align: center;
+      font-size: em(14);
+      text-transform: uppercase;
+      padding: 13px 20px 12px;
+      width: grid(6);
+      background: lighten($main-color, 4);
+      border-radius: $border;
+      margin: 0 auto;
+      letter-spacing: 1px;
+      transition: .2s ease-in;
+      &:hover {
+        background: darken($main-color, 4);
+      }
+    }
+    &--verification { // Código de Verificação do Modal
+      margin-top: 48px;
+      font-size: em(12);
+      opacity: .4;
+      line-height: .6;
+      p:first-child {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: em(13);
+      }
+      p {
+        letter-spacing: 1px;
+      }
+    }
+  }
+}

@@ -1,22 +1,187 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Teste Front-End @ Youzoom</title>
-    <link rel="stylesheet" href="/css/main.css">
-  </head>
-  <body>
-    
-    <!-- O seu conteúdo HTML vai aqui. -->
 
-    <!-- Apague este trecho -->
-    <h1>Teste para a vaga de front-end da Youzoom</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teste Front-End @ Youzoom</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+</head>
 
-    <p>Parece que você tem tudo funcionando. Edite esta página HTML para fazer seu teste</p>
-    <!-- Apague até aqui -->
+<body>
 
-    <script src="/js/main.js"></script>
+  <!-- Loader -->
+  <div class="loader-bg">
+    <div id="loader" class="loader">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <p>Carregando</p>
+    </div>
+  </div>
 
-  </body>
+  <!-- Modal após loader -->
+  <div class="modal">
+    <div class="modal-wrapper">
+      <div class="modal-wrapper--text">
+        <img src="imgs/course.svg" class="item-img">
+        <p>Seu pagamento está completo.</p>
+        <p class="price">$360</p>
+        <p>Obrigado pela confiança!</p>
+      </div>
+      <a href="#" class="modal-wrapper--btn">Continuar</a>
+      <div class="modal-wrapper--verification">
+        <p>Código de verificação:</p>
+        <p>LG896IJGI8656KSJ98KG8CQIU</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bloco de 'decoração' -->
+  <div class="block"></div>
+
+  <!-- Container com o item a ser comprado -->
+  <div class="container item">
+    <h1 class="item-title">Curso de Desenvolvedor Youzoom</h1>
+    <div class="item-content">
+      <div class="item-img">
+        <img src="imgs/course.svg">
+      </div>
+      <div class="item-text">
+        <span class="item-old">$80/mês</span>
+        <span class="item-new">$60/<div class="item-new-subs"><sup>mês</sup><sub>Total: $360.00</sub></div></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container da compra - Escolha de cartão e formulário -->
+  <div class="container compra">
+    <p>Escolha seu cartão</p>
+    <form class="cartoes" id="cartao-type">
+      <input type="radio" id="mastercard" name="cartao" class="trigger-input" checked>
+      <label for="mastercard" class="trigger" id="mastercard">
+        <img src="imgs/bandeiras/mastercard.svg" alt="Master Card" class="trigger-img">
+      </label>
+
+      <input type="radio" id="visa" name="cartao" class="trigger-input">
+      <label for="visa" class="trigger" id="visa">
+        <img src="imgs/bandeiras/visa.svg" alt="Visa" class="trigger-img">
+      </label>
+
+      <input type="radio" id="elo" name="cartao" class="trigger-input">
+      <label for="elo" class="trigger" id="elo">
+        <img src="imgs/bandeiras/elo.svg" alt="Elo" class="trigger-img">
+      </label>
+
+      <input type="radio" id="diners_club" name="cartao" class="trigger-input">
+      <label for="diners_club" class="trigger" id="diners_club">
+        <img src="imgs/bandeiras/diners_club.svg" alt="Diners Club" class="trigger-img">
+      </label>
+
+      <input type="radio" id="amex" name="cartao" class="trigger-input">
+      <label for="amex" class="trigger" id="amex">
+        <img src="imgs/bandeiras/amex.svg" alt="Americam Express" class="trigger-img">
+      </label>
+    </form>
+    <p class="selected">Selecionado: <span id="card-type">Mastercard</span></p>
+
+    <!-- Formulário Geral -->
+    <form class="container main-form" id="main-form">
+
+      <!-- Inputs do Número do Cartão PC/Tablet -->
+      <div class="col-12 pc-tablet">
+        <label>Número do Cartão</label>
+        <div class="row" id="#numeroCartao">
+          <input type="num" class="col-3 card-number" placeholder="9999" maxlength="4" id="nc1">
+          <input type="num" class="col-3 card-number" placeholder="9999" maxlength="4" id="nc2">
+          <input type="num" class="col-3 card-number" placeholder="9999" maxlength="4" id="nc3">
+          <input type="num" class="col-3 card-number" placeholder="9999" maxlength="4" id="nc4">
+        </div>
+      </div>
+
+      <!-- Número do Cartão Mobile -->
+      <div class="col-12 mobile">
+        <label>Número do Cartão</label>
+        <div class="row">
+          <input type="num" class="col-12 card-number-2" placeholder="9999 9999 9999 9999" maxlength="16" id="ncmob">
+        </div>
+      </div>
+
+      <!-- Input do Nome do Titular -->
+      <div class="col-12">
+        <label>Nome do Titular</label>
+        <div class="row">
+          <input type="text" class="col-12 titular" placeholder="Maria José Silva" id="titular">
+        </div>
+      </div>
+
+      <!-- Selects de Validade - Mês/Ano -->
+      <div class="col-6">
+        <label>Validade</label>
+        <div class="row validade" id="validade">
+          <select id="validadeMes" class="col-6">
+           <option value="" disabled selected>Mês</option>
+           <option>01</option>
+           <option>02</option>
+           <option>03</option>
+           <option>04</option>
+           <option>05</option>
+           <option>06</option>
+           <option>07</option>
+           <option>08</option>
+           <option>09</option>
+           <option>10</option>
+           <option>11</option>
+           <option>12</option>
+         </select>
+          <select id="validadeAno" class="col-6">
+           <option value="" disabled selected>Ano</option>
+           <option>2017</option>
+           <option>2018</option>
+           <option>2019</option>
+           <option>2020</option>
+           <option>2021</option>
+           <option>2022</option>
+           <option>2023</option>
+           <option>2024</option>
+           <option>2025</option>
+           <option>2026</option>
+         </select>
+        </div>
+      </div>
+
+      <!-- CVV/CVC -->
+      <div class="col-6">
+        <label>CVV/CVC</label>
+        <div class="row">
+          <input type="num" class="col-12 cvv" placeholder="123" maxlength="3" id="cvv">
+        </div>
+      </div>
+
+      <!-- Botão de Continuar -->
+      <button class="col-12 btn" type="submit" value="Continue"><span>Continuar</span></button>
+    </form>
+
+    <!-- Footer - Segurança e Botão de Reset -->
+    <div class="security">
+      <p>Não se preocupe, sua conta está 100% segura!</p>
+      <a href="#" class="reset">Resetar formulário</a>
+    </div>
+  </div>
+
+  <!-- Scripts utilizados: jQuery/jQuery Mask/Flexibility-->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.11/dist/jquery.mask.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flexibility/2.0.1/flexibility.js"></script>
+  <script src="js/main.js"></script>
+  <script type='text/javascript'>
+    window.onload = function() {
+      flexibility(document.body);
+    }
+
+  </script>
+</body>
+
 </html>
